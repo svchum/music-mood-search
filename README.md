@@ -1,3 +1,7 @@
+## Demo
+
+[![Mood-Based Music Search Demo](https://img.youtube.com/vi/Hd8nCgaBpWI/maxresdefault.jpg)](https://youtu.be/Hd8nCgaBpWI)
+
 # Mood-Based Music Search
 
 A FastAPI web app that recommends songs from natural-language mood and situation queries. Instead of searching only by title, artist, or genre, users can type prompts like:
