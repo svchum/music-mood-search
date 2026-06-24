@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mood Music Search</title>
+    <link rel="stylesheet" href="/static/styles.css?v=20260608b">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="intro">
+        <p class="eyebrow">NLP Music Retrieval Prototype</p>
+        <h1>Find songs by mood, not just keywords.</h1>
+        <form action="/search" method="get" class="search-form">
+          <div class="query-row">
+            <input
+              type="search"
+              name="q"
+              value="{{ query }}"
+              placeholder="Search your current mood"
+              aria-label="Mood query"
+            >
+            <button type="submit">Search</button>
+          </div>
+          <div class="method-row" aria-label="Retrieval method">
+            <label>
+              <input type="radio" name="method" value="semantic" {% if method != "keyword" %}checked{% endif %}>
+              Semantic NLP
+            </label>
+            <label>
+              <input type="radio" name="method" value="keyword" {% if method == "keyword" %}checked{% endif %}>
+              Keyword baseline
+            </label>
+          </div>
+          <details class="filter-panel" {% if filters.genre or filters.explicit != "any" or filters.energy != "any" or filters.valence != "any" or filters.popularity != "any" or filters.decade %}open{% endif %}>
+            <summary>Filters</summary>
+            <section class="filters" aria-label="Search filters">
+              <label>
+                Genre
+                <select name="genre">
+                  <option value="">Any</option>
+                  {% for genre in genres %}
+                    <option value="{{ genre }}" {% if filters.genre == genre %}selected{% endif %}>{{ genre }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <label>
+                Explicit
+                <select name="explicit">
+                  <option value="any" {% if filters.explicit == "any" %}selected{% endif %}>Any</option>
+                  <option value="no" {% if filters.explicit == "no" %}selected{% endif %}>Clean</option>
+                  <option value="yes" {% if filters.explicit == "yes" %}selected{% endif %}>Explicit</option>
+                </select>
+              </label>
+              <label>
+                Energy
+                <select name="energy">
+                  <option value="any" {% if filters.energy == "any" %}selected{% endif %}>Any</option>
+                  <option value="high" {% if filters.energy == "high" %}selected{% endif %}>High</option>
+                  <option value="low" {% if filters.energy == "low" %}selected{% endif %}>Low</option>
+                </select>
+              </label>
+              <label>
+                Valence
+                <select name="valence">
+                  <option value="any" {% if filters.valence == "any" %}selected{% endif %}>Any</option>
+                  <option value="bright" {% if filters.valence == "bright" %}selected{% endif %}>Bright</option>
+                  <option value="dark" {% if filters.valence == "dark" %}selected{% endif %}>Darker</option>
+                </select>
+              </label>
+              <label>
+                Popularity
+                <select name="popularity">
+                  <option value="any" {% if filters.popularity == "any" %}selected{% endif %}>Any</option>
+                  <option value="mainstream" {% if filters.popularity == "mainstream" %}selected{% endif %}>Mainstream</option>
+                  <option value="hidden" {% if filters.popularity == "hidden" %}selected{% endif %}>Hidden gems</option>
+                </select>
+              </label>
+              <label>
+                Decade
+                <select name="decade">
+                  <option value="">Any</option>
+                  {% for decade in decades %}
+                    <option value="{{ decade }}" {% if filters.decade == decade %}selected{% endif %}>{{ decade }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+            </section>
+          </details>
+        </form>
+        <section class="recommendations" aria-label="Recommended searches">
+          <div class="recommendations-heading">
+            <h2>Recommended searches</h2>
+            <a class="refresh-link slim" href="{% if query %}/search?q={{ query | urlencode }}&method={{ method }}&offset={{ offset }}&rec_seed={{ next_rec_seed }}{% else %}/?rec_seed={{ next_rec_seed }}{% endif %}">
+              New Suggestions
+            </a>
+          </div>
+          <div class="examples">
+            {% for suggestion in recommended_searches %}
+              <a href="/search?q={{ suggestion | urlencode }}&method=semantic&rec_seed={{ rec_seed }}">{{ suggestion }}</a>
+            {% endfor %}
+          </div>
+        </section>
+        <p class="utility-links">
+          <a class="text-link" href="/evaluate">Open evaluation view</a>
+          <span>/</span>
+          <a class="text-link" href="/method">Method</a>
+        </p>
+      </section>
+
+      {% if query %}
+        <section class="results">
+          <div class="results-heading">
+            <div>
+              <h2>Results for "{{ query }}"</h2>
+              {% if offset %}
+                <p class="result-range">Showing alternate results {{ offset + 1 }}-{{ offset + results | length }}</p>
+              {% endif %}
+            </div>
+            <p>{{ results | length }} results / backend: {{ backend }}</p>
+          </div>
+          <a class="refresh-link" href="/search?q={{ query | urlencode }}&method={{ method }}&offset={{ next_offset }}&genre={{ filters.genre | urlencode }}&explicit={{ filters.explicit }}&energy={{ filters.energy }}&valence={{ filters.valence }}&popularity={{ filters.popularity }}&decade={{ filters.decade | urlencode }}">
+            Refresh Results
+          </a>
+
+          {% for song in results %}
+            <article class="song-card">
+              <div class="song-main">
+                <h3>{{ song.title }}</h3>
+                <p class="artist">{{ song.display_artist }}</p>
+              </div>
+              <div class="score">Confidence {{ song.confidence }}</div>
+              {% if song.audio_features %}
+                <p class="features">
+                  <span>valence {{ "%.2f"|format(song.audio_features.valence) }}</span>
+                  <span>energy {{ "%.2f"|format(song.audio_features.energy) }}</span>
+                  <span>dance {{ "%.2f"|format(song.audio_features.danceability) }}</span>
+                  <span>{{ "%.0f"|format(song.audio_features.tempo) }} BPM</span>
+                </p>
+              {% endif %}
+              <p class="tags">
+                {% for tag in song.mood_tags %}
+                  <span>{{ tag }}</span>
+                {% endfor %}
+              </p>
+              {% if song.audio_url %}
+                <audio class="audio-player" controls src="{{ song.audio_url }}">
+                  Your browser does not support the audio element.
+                </audio>
+              {% endif %}
+              <section class="why-match">
+                <h4>Why This Matched</h4>
+                <ul>
+                  <li>Score: {{ song.score }} / confidence {{ song.confidence }}</li>
+                  <li>Theme: {{ song.short_theme_summary }}</li>
+                  {% for reason in song.match_reasons %}
+                    <li>{{ reason }}</li>
+                  {% endfor %}
+                </ul>
+              </section>
+            </article>
+          {% endfor %}
+        </section>
+      {% endif %}
+    </main>
+  </body>
+</html>

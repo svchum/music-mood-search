@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Method</title>
+    <link rel="stylesheet" href="/static/styles.css?v=20260608b">
+  </head>
+  <body>
+    <main class="shell wide-shell">
+      <section class="intro compact-intro">
+        <p class="eyebrow">Method</p>
+        <h1>How the music search works.</h1>
+        <p><a class="text-link" href="/">Back to search</a></p>
+      </section>
+
+      <section class="method-grid">
+        <article class="method-card">
+          <h2>Semantic Search</h2>
+          <p>Semantic search tries to match meaning, not just exact words. The app turns the user's mood query and each song's mood-focused document into vectors, then ranks songs by vector similarity.</p>
+          <p>The song document includes genre, niche genres, mood tags, generated theme summary, Spotify audio-feature text, and a lyrics excerpt. Artist names are excluded from the semantic document so searches do not match only because an artist name contains a similar word.</p>
+        </article>
+
+        <article class="method-card">
+          <h2>Keyword Baseline</h2>
+          <p>The keyword baseline is the simpler comparison system. It expands query words with a hand-built synonym map, then scores songs based on matching mood tags and matching words in the song document.</p>
+          <p>It exists as a baseline so the project can test whether semantic NLP retrieval is actually better than simpler matching.</p>
+        </article>
+
+        <article class="method-card">
+          <h2>Mood Tags</h2>
+          <p>Mood tags are generated from both lyrics and Spotify audio features. Lyric rules look for emotion words related to fear, disgust, anger, surprise, happiness, sadness, romance, loneliness, confidence, guilt, and more.</p>
+          <p>Audio rules add tags from features: low valence can suggest melancholy or sadness, high energy can suggest intensity, high danceability can suggest upbeat movement, high acousticness can suggest study/calm, and tempo can suggest slow restraint or fast urgency.</p>
+        </article>
+
+        <article class="method-card">
+          <h2>Precision@5</h2>
+          <p>Precision@5 measures how many of the top five results are relevant. If four out of five songs match the query, precision@5 is 0.80.</p>
+          <p>The evaluation page lets you label relevant results for semantic search and keyword search, then compares their average precision@5.</p>
+        </article>
+
+        <article class="method-card">
+          <h2>Score And Confidence</h2>
+          <p>The score is the ranking value used internally. In semantic search, it combines sentence-transformer similarity with small bonuses for matching mood tags and matching query concepts.</p>
+          <p>Confidence is relative, not a probability. The top result for a query gets confidence 1.0, and other results are scaled against that top score.</p>
+        </article>
+
+        <article class="method-card">
+          <h2>Embedding Backend</h2>
+          <p>Backend: {{ backend }}.</p>
+          <p>Sentence-transformers is a Python library for creating sentence embeddings. The model all-MiniLM-L6-v2 is a compact transformer model that maps short text into vectors that can be compared by similarity. It is fast enough for this class prototype while still capturing useful semantic relationships.</p>
+        </article>
+
+        <article class="method-card">
+          <h2>Audio Features</h2>
+          <p>Valence measures musical positivity. Energy measures intensity. Danceability estimates rhythmic movement. BPM/tempo estimates speed. These values affect mood tags and explanations, and they are included in the semantic document.</p>
+          <p>For example, a low-valence high-energy song may be tagged angry or frustrated, while a low-energy acoustic song may be tagged calm or study.</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

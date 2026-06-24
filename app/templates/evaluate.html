@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Evaluate Mood Music Search</title>
+    <link rel="stylesheet" href="/static/styles.css?v=20260607c">
+  </head>
+  <body>
+    <main class="shell wide-shell">
+      <section class="intro compact-intro">
+        <p class="eyebrow">Evaluation</p>
+        <h1>Semantic retrieval vs. keyword baseline.</h1>
+        <p class="page-copy">
+          Check the songs that actually match each query. These fixed queries are the test set used to compare semantic retrieval against the keyword baseline.
+        </p>
+        <p class="page-copy">Semantic backend: {{ backend }}</p>
+        <div class="metric-row">
+          <span>Semantic avg precision@5: <strong>{{ semantic_average }}</strong></span>
+          <span>Keyword avg precision@5: <strong>{{ keyword_average }}</strong></span>
+        </div>
+        <p><a class="text-link" href="/">Back to search</a></p>
+      </section>
+
+      <form method="post" action="/evaluate">
+        <section class="evaluation-list">
+          {% for row in rows %}
+            <article class="eval-card">
+              <div class="eval-title-row">
+                <h2>{{ row.query }}</h2>
+                <p>
+                  Semantic P@5 {{ row.semantic_precision }} /
+                  Keyword P@5 {{ row.keyword_precision }}
+                </p>
+              </div>
+              <div class="eval-grid">
+                <div>
+                  <h3>Semantic NLP</h3>
+                  <ol class="ranked-list">
+                    {% for song in row.semantic_results %}
+                      <li>
+                        <label class="result-check">
+                          <input
+                            type="checkbox"
+                            name="semantic::{{ row.query }}"
+                            value="{{ song.title }}"
+                            {% if song.title in row.semantic_relevant %}checked{% endif %}
+                          >
+                          <span>
+                            <strong>{{ song.title }}</strong>
+                            <small>{{ song.artist }}</small>
+                            <em>confidence {{ song.confidence }}</em>
+                          </span>
+                        </label>
+                      </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+                <div>
+                  <h3>Keyword Baseline</h3>
+                  <ol class="ranked-list">
+                    {% for song in row.keyword_results %}
+                      <li>
+                        <label class="result-check">
+                          <input
+                            type="checkbox"
+                            name="keyword::{{ row.query }}"
+                            value="{{ song.title }}"
+                            {% if song.title in row.keyword_relevant %}checked{% endif %}
+                          >
+                          <span>
+                            <strong>{{ song.title }}</strong>
+                            <small>{{ song.artist }}</small>
+                            <em>confidence {{ song.confidence }}</em>
+                          </span>
+                        </label>
+                      </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </section>
+        <div class="sticky-actions">
+          <button type="submit">Save Evaluation Labels</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

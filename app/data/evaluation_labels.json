@@ -1,0 +1,140 @@
+{
+  "songs for walking home alone at night": {
+    "semantic_relevant": [
+      "Alone",
+      "Blinding Lights - Acoustic"
+    ],
+    "keyword_relevant": [
+      "Breathless"
+    ]
+  },
+  "sad but energetic songs": {
+    "semantic_relevant": [
+      "Bright Side Of Broken",
+      "2 soon"
+    ],
+    "keyword_relevant": [
+      "2 soon"
+    ]
+  },
+  "peaceful music for studying": {
+    "semantic_relevant": [
+      "Aloha Oe"
+    ],
+    "keyword_relevant": [
+      "Angels and Sailors"
+    ]
+  },
+  "nostalgic but upbeat songs": {
+    "semantic_relevant": [
+      "Afraid (feat. HARLEE)",
+      "Ain't No Sunshine"
+    ],
+    "keyword_relevant": []
+  },
+  "angry workout songs": {
+    "semantic_relevant": [
+      "A New Beginning"
+    ],
+    "keyword_relevant": [
+      "All Eyes on You"
+    ]
+  },
+  "lonely but peaceful songs": {
+    "semantic_relevant": [
+      "Alone",
+      "Blinding Lights - Acoustic"
+    ],
+    "keyword_relevant": [
+      "Baby, I Don't Cry Over You"
+    ]
+  },
+  "happy dance music": {
+    "semantic_relevant": [
+      "BLACK DRESS",
+      "Buryberry"
+    ],
+    "keyword_relevant": [
+      "C'mon - Album Version & Radio Edit"
+    ]
+  },
+  "rainy day breakup songs": {
+    "semantic_relevant": [
+      "Bright Side Of Broken",
+      "A World Of Our Own"
+    ],
+    "keyword_relevant": [
+      "Angel Flying Too Close to the Ground"
+    ]
+  },
+  "dreamy songs about healing": {
+    "semantic_relevant": [
+      "All Night",
+      "Another Life"
+    ],
+    "keyword_relevant": [
+      "(Only) About Love - Demo"
+    ]
+  },
+  "confident songs with a dark mood": {
+    "semantic_relevant": [
+      "Blood Hands",
+      "Black Treasures Of Melancholy"
+    ],
+    "keyword_relevant": [
+      "Beautiful Death",
+      "Broken Maze"
+    ]
+  },
+  "frustrated songs after an argument": {
+    "semantic_relevant": [
+      "Anthem",
+      "Boomerang",
+      "505 - Live"
+    ],
+    "keyword_relevant": [
+      "Ben Has A Kid",
+      "After All"
+    ]
+  },
+  "annoyed songs when everything is irritating": {
+    "semantic_relevant": [
+      "Art Of Uff"
+    ],
+    "keyword_relevant": [
+      "911 for Peace"
+    ]
+  },
+  "resentful songs about betrayal": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "anxious songs for overthinking at night": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "jealous songs about someone moving on": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "guilty songs about regret and apology": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "bored restless songs": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "defiant songs about not backing down": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "melancholy songs that feel quiet and gray": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  },
+  "hopeful songs about getting better": {
+    "semantic_relevant": [],
+    "keyword_relevant": []
+  }
+}
