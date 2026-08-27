@@ -78,26 +78,6 @@ The semantic search uses `all-MiniLM-L6-v2`, a compact Sentence Transformer mode
 
 The app compares the query embedding with each song embedding using cosine similarity. Songs with embeddings closest to the query are ranked higher.
 
-Confidence is shown as a relative display value:
-
-```text
-song score / highest score for that query
-```
-
-So confidence is not a probability. It shows how strong a result is compared with the top-ranked result for the same search.
-
-## Evaluation
-
-The `/evaluate` page is used to label whether the top five results for fixed test queries are relevant.
-
-Precision@5 is calculated as:
-
-```text
-relevant results in top 5 / 5
-```
-
-This allows semantic NLP search and the keyword baseline to be compared on the same queries.
-
 ## Project Structure
 
 ```text
@@ -185,27 +165,6 @@ Example:
 ```text
 /api/search?q=sad%20but%20energetic%20songs&method=semantic
 ```
-
-## What I Learned
-
-This project helped me practice:
-
-- building a complete FastAPI app
-- using sentence embeddings for semantic retrieval
-- designing a keyword baseline for comparison
-- using cosine similarity for ranking
-- combining lyrics and audio features as retrieval evidence
-- evaluating search quality with precision@5
-- explaining model outputs in a user-facing interface
-
-## Future Improvements
-
-- Add more labeled evaluation queries
-- Support graded relevance labels instead of only relevant/not relevant
-- Improve reranking with stronger audio-feature weighting
-- Add result diversity to avoid repetitive recommendations
-- Try a music-specific embedding or emotion classification model
-- Add a fuller RAG chatbot layer for conversational music recommendations
 
 ## References
 
