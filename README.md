@@ -12,7 +12,7 @@ sad but energetic songs
 annoyed but intense songs
 ```
 
-The app retrieves songs from a Spotify lyrics/audio-feature dataset, ranks them with either semantic NLP search or a keyword baseline, and explains why each result matched.
+The app retrieves songs from a Spotify lyrics/audio-feature dataset, ranks them with either semantic NLP search or a keyword baseline, and explains why each result matched. *Uploaded from school repository*
 
 ## Why I Built This
 
