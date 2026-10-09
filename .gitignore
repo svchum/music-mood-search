@@ -1,0 +1,9 @@
+
+app/data/embeddings_cache.json
+app/data/embedding_cache.json
+
+__pycache__/
+
+.venv/
+venv/
+env/

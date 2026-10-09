@@ -4,154 +4,64 @@
 
 # Mood-Based Music Search
 
-A FastAPI web app that recommends songs from natural-language mood and situation queries. Instead of searching only by title, artist, or genre, users can type prompts like:
+A FastAPI web app that recommends songs based on natural-language mood and situation queries. Instead of searching by title or artist, describe what you're looking for:
 
-```text
-songs for walking home alone at night
-sad but energetic songs
-annoyed but intense songs
-```
-
-The app retrieves songs from a Spotify lyrics/audio-feature dataset, ranks them with either semantic NLP search or a keyword baseline, and explains why each result matched. *Uploaded from school repository*
-
-## Why I Built This
-
-Music search is often emotional and contextual. A user may not know the exact song they want, but they know the mood they are looking for. This project explores whether semantic search can improve mood-based music retrieval compared with a simpler keyword-based approach.
-
-The project is built as an NLP retrieval experiment, not just a playlist UI. It includes:
-
-- two search methods
-- grounded result explanations
-- optional filters
-- an evaluation workflow using precision@5
+- "Songs for walking home alone at night"
+- "Sad but energetic songs"
+- "Annoyed but intense songs"
 
 ## Features
 
-- Natural-language mood search
-- Semantic search using `sentence-transformers`
-- `all-MiniLM-L6-v2` sentence embeddings
-- Keyword baseline for comparison
-- Mood tags generated from lyrics and audio features
-- Song ranking using semantic similarity, mood overlap, and audio-feature evidence
-- "Why This Matched" explanations for each recommendation
-- Optional filters for genre, explicit status, energy, valence, popularity, and decade
-- Evaluation page for labeling top-5 results
-- Precision@5 scoring script
-- JSON API endpoints for search and method comparison
+- Natural-language song search using semantic NLP
+- Keyword-based search for comparison
+- Recommendations with explanations of why each song matched
+- Optional filters for genre, energy, popularity, decade, and more
+- Evaluation workflow to compare search quality using precision@5
+
+## How It Works
+
+The app uses the `all-MiniLM-L6-v2` Sentence Transformer model to convert search queries and song information into embeddings. Songs are ranked by semantic similarity, with additional signals from mood tags and audio features.
+
+A keyword-based baseline provides a comparison point for evaluating whether semantic search improves results.
 
 ## Tech Stack
 
 - **Backend:** Python, FastAPI
-- **Templates:** Jinja2
-- **NLP:** Sentence Transformers, `all-MiniLM-L6-v2`
-- **Evaluation:** precision@5
-- **Data:** Spotify songs dataset with lyrics, genres, popularity, and audio features
-
-## How It Works
-
-Each song is converted into a searchable text document made from:
-
-- lyrics excerpt
-- generated mood tags
-- theme summary
-- genre and niche genre information
-- audio feature descriptions
-- metadata such as popularity and release year
-
-The semantic search pipeline is:
-
-```text
-user mood query
-→ expanded query concepts
-→ sentence embedding
-→ compare against song document embeddings
-→ rank by cosine similarity
-→ apply small mood/audio reranking bonuses
-→ return top results with explanations
-```
-
-The keyword baseline uses direct word overlap, mood synonym expansion, mood tag matches, and small audio-profile bonuses. This gives the project a fair comparison point for evaluating whether semantic search actually improves retrieval.
-
-## Semantic Search
-
-The semantic search uses `all-MiniLM-L6-v2`, a compact Sentence Transformer model. It converts both the user query and each song document into embeddings, which are numerical vectors representing meaning.
-
-The app compares the query embedding with each song embedding using cosine similarity. Songs with embeddings closest to the query are ranked higher.
-
-## Project Structure
-
-```text
-app/
-  main.py                  FastAPI routes and page rendering
-  retrieval.py             keyword baseline, shared scoring, explanations
-  nlp_retrieval.py         semantic search and embedding cache logic
-  import_spotify_full.py   dataset import/preprocessing script
-  score_evaluation.py      precision@5 scoring script
-  data/
-    songs_imported.json
-    evaluation_queries.json
-    evaluation_labels.json
-  templates/
-    index.html
-    method.html
-    evaluate.html
-  static/
-    styles.css
-README.md
-report.md
-requirements.txt
-```
+- **Frontend:** Jinja2, HTML, CSS
+- **NLP:** Sentence Transformers (`all-MiniLM-L6-v2`)
+- **Data:** Song lyrics, genres, and audio features
+- **Evaluation:** Precision@5
 
 ## Run Locally
 
-Install dependencies:
+1. Clone the repository and navigate to the project directory.
+2. Install the dependencies:
 
-```bash
-python -m pip install -r requirements.txt
-```
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
 
-Start the server:
+3. Start the server:
 
-```bash
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-```
+   ```bash
+   python -m uvicorn app.main:app --reload
+   ```
 
-Open:
+4. Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
-```text
-http://127.0.0.1:8000
-```
+The first semantic search may take longer while the model and song embeddings load.
 
-For development with reload:
+## Dataset
 
-```bash
-python -m uvicorn app.main:app --reload
-```
+The app uses a preprocessed song dataset stored in `app/data/songs_imported.json`.
 
-The first semantic search may take longer because the sentence-transformer model and embeddings need to load.
-
-## Rebuild the Dataset
-
-If you have the original Kaggle dataset folder, replace `<DATASET_FOLDER>` with the path to that folder:
+To rebuild it, download the original dataset and run:
 
 ```bash
 python -m app.import_spotify_full "<DATASET_FOLDER>" --limit 1500 --max-rows 75000 --min-popularity 20
 ```
 
-This creates:
-
-```text
-app/data/songs_imported.json
-```
-
-The app may also generate:
-
-```text
-app/data/embedding_cache.json
-```
-
-That file is a generated cache and does not need to be committed.
-
+Replace `<DATASET_FOLDER>` with the path to your downloaded dataset.
 ## API Endpoints
 
 ```text
@@ -168,6 +78,5 @@ Example:
 
 ## References
 
-- Reimers, N. and Gurevych, I. "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks." arXiv, 2019. https://arxiv.org/abs/1908.10084
-- Hugging Face model card: `sentence-transformers/all-MiniLM-L6-v2`. https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
-- DataStax Vibe Check inspiration: https://github.com/datastax/vibe-check
+- [Sentence Transformers model](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+- [Dataset](https://www.kaggle.com/datasets/serkantysz/550k-spotify-songs-audio-lyrics-and-genres)
